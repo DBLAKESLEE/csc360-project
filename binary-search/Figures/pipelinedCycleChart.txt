@@ -1,0 +1,28 @@
+	0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15	16	17	18	19	20	21	22	23	24	25	26	27	28	29	30	31	32	33	34	35	36	37	38	39	40	41	42	43	44	45	46	47	48	49	50	51	52	53	54	55	56	57	58	59	60	61	62	63	64	65	66	67	68	69	70	71	72	73	74	
+auipc x12 0x10000	IF	ID	EX	MEM	WB																																																																							
+addi x12 x12 0		IF	ID	EX	MEM	WB																																																																						
+auipc x13 0x10000			IF	ID	EX	MEM	WB																																																																					
+lw x13 32 x13				IF	ID	EX	MEM	WB																																																																				
+auipc x14 0x10000					IF	ID	EX	MEM	WB																																																																			
+lw x14 28 x14						IF	ID	EX	MEM	WB																																																																		
+jal x1 12 <BINARY>							IF	ID	EX	MEM	WB																																																																	
+addi x17 x0 10								IF	ID																																																										IF	ID	EX	MEM	WB					
+ecall									IF																																																											IF	ID	EX	-	-	MEM	WB		
+addi x28 x0 0										IF	ID	EX	MEM	WB																																																							IF	ID	-					
+addi x29 x13 -1											IF	ID	EX	MEM	WB																																																							IF	-					
+blt x29 x28 56 <FAIL>												IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB																			
+add x30 x28 x29													IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB																		
+srli x30 x30 1														IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB																	
+slli x31 x30 2															IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB																
+add x31 x31 x12																IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB															
+lw x31 0 x31																	IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB											IF	ID	EX	MEM	WB									IF	ID	EX	MEM	WB														
+beq x14 x31 24 <FOUND_IT>																		IF	ID	-	EX	MEM	WB								IF	ID	-	EX	MEM	WB										IF	ID	-	EX	MEM	WB								IF	ID	-	EX	MEM	WB												
+blt x14 x31 12 <IN_LOWER_HALF>																			IF	-	ID	EX	MEM	WB								IF	-	ID	EX	MEM	WB										IF	-	ID	EX	MEM	WB								IF	-	ID														
+addi x28 x30 1																					IF	ID	EX	MEM	WB									IF	ID														IF	ID	EX	MEM	WB									IF														
+beq x0 x0 -36 <LOOP>																						IF	ID	EX	MEM	WB									IF															IF	ID	EX	MEM	WB																						
+addi x29 x30 -1																							IF	ID												IF	ID	EX	MEM	WB											IF	ID																								
+beq x0 x0 -44 <LOOP>																								IF													IF	ID	EX	MEM	WB											IF																								
+addi x10 x30 0																																						IF	ID																								IF	ID	EX	MEM	WB									
+jalr x0 x1 0																																							IF																									IF	ID	EX	MEM	WB								
+addi x10 x0 -1																																																																	IF	ID										
+jalr x0 x1 0																																																																		IF										
