@@ -1,4 +1,12 @@
 # Insertion Sort Analysis
+- Non-Pipelined Version
+		- Number executed instr. = 96
+		- Clock cycles = 135
+		- CPI = 1.41
+- Pipelined Version
+		- Number executed instr. = 127
+		- Clock cycles = 177
+		- CPI = 1.39
 
 # Binary Search Analysis (outline)
 - T = IQ/R, so solve for T1 >= T5 where T1 is execution time for single-stage and T5 is five-stage
@@ -10,3 +18,4 @@
     - Control: the branches (see figures, charts)
         - Your branches should all be next to each other, so that the false-fallthrough starts processing the next branch
         - DON'T branch to code that checks another branch, because that's ineffecient (lots of nops)
+

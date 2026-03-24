@@ -1,0 +1,102 @@
+\documentclass[letterpaper]{article}
+\usepackage{enumitem}
+\usepackage{amsmath,multirow,graphicx,geometry}
+\usepackage[listings]{tcolorbox}
+\usepackage{float}
+\usepackage[american]{circuitikz}
+\tcbuselibrary{breakable}
+\lstset{tabsize=1,showstringspaces=false,breaklines=true,
+        showstringspaces=false,basicstyle=\footnotesize}
+\geometry{letterpaper, left=20mm, right=20mm, top=20mm, bottom=20mm}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinelanguage{RISC5}{}
+
+\lstset{
+  language=RISC5,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  showstringspaces=false,
+  moredelim=**[is][\color{blue}]{@L@}{@},	   % Load use hazard
+  moredelim=**[is][\color{orange}]{@D@}{@},  % Data hazard
+  moredelim=**[is][\color{green}]{@C@}{@},   % Control hazard
+	numbers=left,
+	numberstyle=\tiny\color{gray},
+	stepnumber=1,
+	numbersep=9pt,
+	xleftmargin=1em,
+	framexleftmargin=1em
+}
+
+\begin{document} 
+
+\hfill
+\begin{tabular}{llrr}
+	\multirow{5}{6em}{
+		\includegraphics[width=2cm]{./../Figures/engineering-logo.png} } 
+			& {\bf Course:} & CSC 360 \\
+			& {\bf Assignment:} & Part 3: Hazards & \\ 
+			& {\bf Name:} & Dawson Blakeslee & \\
+			& {\bf Email:} & diblakeslee1@umary.edu & \\
+			& {\bf Date:} & March 24, 2026 & 
+\end{tabular}
+
+\begin{center}
+\section*{Hazard Documentation}
+\end{center}
+
+\begin{tcolorbox}[title=Insertion Sort with Pipeline Hazards Highlighted, boxrule=0.8pt]
+	\begin{lstlisting}
+# key
+# t0: i
+# t1: array[i]
+# t2: current value
+# t3: j
+# t4: array[j]
+# t5: value at array[j]
+
+.data
+		array: .word 4, 5, -1, 100, 1, 22
+		n: .word 6
+
+.text
+		lw a1, n
+		la a0, array
+		li t0, 1
+
+for_loop:
+		@C@bge@ @D@t0@, @C@a1, end@						@C@# branch hazard and dependency from line 39@
+		slli @D@t1@, t0, 2
+		add @D@t1@, a0, @D@t1@ 						@D@# add rs2 depends on rd of slli@
+		lw t2, 0(t1)
+		addi t3, t0, -1
+
+while_loop:
+		@C@blt@ @D@t3@, @C@x0, insert@			@C@# branch hazard and dependency from line 32@
+		slli @D@t4@, t3, 2
+		add @D@t4@, a0, @D@t4@							@D@# add rs2 depends on rd of slli@
+		lw @L@t5@, 0(@D@t4@)									@L@# here there is a load use hazard where lw writes t5,@
+		@C@ble@ @L@t5@, @C@t2, insert@			@L@# in MEM/WB, but ble needs t5 in EX@
+		sw @L@t5@, 4(t4)									@L@# similarly, t5 written in MEM/WB but need as input for sw@
+		addi @C@t3@, @D@t3@, -1								
+		@C@beq x0, x0, while_loop@
+
+insert:
+		slli @D@t4@, t3, 2
+		add @D@t4@, a0, @D@t4@							@D@# add rs2 depends on rd of slli@
+		sw t2, 4(t4)
+		addi @C@t0@, @D@t0@, 1
+		@C@beq x0, x0, for_loop@	@C@# branch hazard
+	
+end:
+		li a7, 10
+		ecall
+
+\end{lstlisting}
+
+\end{tcolorbox}
+
+
+\end{document}
