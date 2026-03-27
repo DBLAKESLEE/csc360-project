@@ -1,46 +1,101 @@
-# key
-# t0: i
-# t1: array[i]
-# t2: current value
-# t3: j
-# t4: array[j]
-# t5: value at array[j]
-
-.data
-	array: .word 4, 5, -1, 100, 1, 22 		# array
-	n: .word 6 														# array size
-
-.text
-
-	lw a1, n 															# a1 = array size
-	la a0, array 													# a0 = array address
-	li t0, 1 # i = 1
-
-for_loop:
-	bge t0, a1, end
-	slli t1, t0, 2 												# compute address array[i]
-	add t1, a0, t1 												# adding offset to base address of array
-	lw t2, 0(t1)
-	addi t3, t0, -1 											# j = i - 1
-
-while_loop:
-	blt t3, x0, insert
-	slli t4, t3, 2 												# compute address array[j]
-	add t4, a0, t4 												# adding offset to base address of array
-	lw t5, 0(t4) 													# loading array[j]
-
-	ble t5, t2, insert
-	sw t5, 4(t4) 													# value at array[j+1] = array[j]
-	addi t3, t3, -1 											# j = j - 1
-	beq x0, x0, while_loop
-
-insert:
-	slli t4, t3, 2 												# array[j] = j + offset 4
-	add t4, a0, t4 												# adding offset to base address of array
-	sw t2, 4(t4) 													# storing array[j + offset] into current value
-	addi t0, t0, 1 												# i = i + 1
-	beq x0, x0, for_loop
-
-end:
-	li a7, 10
-	ecall
+	.file	"test.c"
+	.option nopic
+	.attribute arch, "rv64i2p1_m2p0_a2p1_f2p2_d2p2_c2p0_zicsr2p0"
+	.attribute unaligned_access, 0
+	.attribute stack_align, 16
+	.text
+	.section	.rodata
+	.align	3
+.LC0:
+	.word	4
+	.word	5
+	.word	-1
+	.word	100
+	.word	1
+	.word	22
+	.text
+	.align	1
+	.globl	main
+	.type	main, @function
+main:
+	addi	sp,sp,-64
+	sd	s0,56(sp)
+	addi	s0,sp,64
+	lui	a5,%hi(.LC0)
+	addi	a5,a5,%lo(.LC0)
+	ld	a4,0(a5)
+	sd	a4,-56(s0)
+	ld	a4,8(a5)
+	sd	a4,-48(s0)
+	ld	a5,16(a5)
+	sd	a5,-40(s0)
+	li	a5,6
+	sw	a5,-28(s0)
+	li	a5,1
+	sw	a5,-20(s0)
+	j	.L2
+.L6:
+	lw	a5,-20(s0)
+	slli	a5,a5,2
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	lw	a5,-40(a5)
+	sw	a5,-32(s0)
+	lw	a5,-20(s0)
+	addiw	a5,a5,-1
+	sw	a5,-24(s0)
+	j	.L3
+.L5:
+	lw	a5,-24(s0)
+	addiw	a5,a5,1
+	sext.w	a3,a5
+	lw	a5,-24(s0)
+	slli	a5,a5,2
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	lw	a4,-40(a5)
+	slli	a5,a3,2
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	sw	a4,-40(a5)
+	lw	a5,-24(s0)
+	addiw	a5,a5,-1
+	sw	a5,-24(s0)
+.L3:
+	lw	a5,-24(s0)
+	sext.w	a5,a5
+	blt	a5,zero,.L4
+	lw	a5,-24(s0)
+	slli	a5,a5,2
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	lw	a4,-40(a5)
+	lw	a5,-32(s0)
+	sext.w	a5,a5
+	blt	a5,a4,.L5
+.L4:
+	lw	a5,-24(s0)
+	addiw	a5,a5,1
+	sext.w	a5,a5
+	slli	a5,a5,2
+	addi	a5,a5,-16
+	add	a5,a5,s0
+	lw	a4,-32(s0)
+	sw	a4,-40(a5)
+	lw	a5,-20(s0)
+	addiw	a5,a5,1
+	sw	a5,-20(s0)
+.L2:
+	lw	a5,-20(s0)
+	mv	a4,a5
+	lw	a5,-28(s0)
+	sext.w	a4,a4
+	sext.w	a5,a5
+	blt	a4,a5,.L6
+	li	a5,0
+	mv	a0,a5
+	ld	s0,56(sp)
+	addi	sp,sp,64
+	jr	ra
+	.size	main, .-main
+	.ident	"GCC: (13.2.0-11ubuntu1+12) 13.2.0"
