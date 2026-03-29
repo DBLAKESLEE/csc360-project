@@ -13,7 +13,7 @@ void printArray(int arr[], int n){
 
 int main(void){
 
-	int arr[] = {1, 22, 34, -1, 123, 5};
+	int arr[] = {4, 5, -1, 100, 1, 22};
   int n = sizeof(arr) / sizeof(arr[0]);
 
   printf("Unsorted array: ");
