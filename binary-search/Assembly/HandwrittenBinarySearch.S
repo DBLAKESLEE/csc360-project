@@ -1,3 +1,4 @@
+#processor.searchMethod: cycles/instructions
 #single.highNot: 54/54
 #single.lowNot: 44/44
 #single.deepYes: 50/50
@@ -34,8 +35,8 @@ main:
 
 BINARY:
 #init left and right
-addi t3, zero, 0
-addi t4, a3, -1
+addi t3, zero, 0 #left
+addi t4, a3, -1  #right
 
 LOOP:
 blt t4, t3, FAIL

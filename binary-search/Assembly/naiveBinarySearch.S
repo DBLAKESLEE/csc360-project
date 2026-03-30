@@ -1,3 +1,4 @@
+#processor.searchMethod: cycles/instructions
 #single.highNot: 54/54
 #single.lowNot: 44/44
 #single.deepYes: 50/50
