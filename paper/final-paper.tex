@@ -37,16 +37,45 @@
 \indent 
 
 \section{Design Approach}
-\indent 
+\indent
 	\subsection{Insertion Sort}
 	\subsection{Binary Search}
-	Testing, testing, 123
+    For simple algorithms like binary search, the first step was drawing a high-level flowchart (see figure \ref{fig:highBinary}). Then, it was converted into C code and tested for bugs. This was converted into a low-level flowchart (figure \ref{fig:lowBinary}) and then, given the simplicity of the algorithm, converted into assembly by hand to produce the naive implementation. An optimized compiler-generated algorithm, referred to as just the compiler algorithm, followed, and both were tested in Ripes. Finally, after studying the hazards, they were modified into one final algorithm, called the best algorithm.
+
 
 \section{Flowcharts and Design Progression}
 \indent 
 	\subsection{Insertion Sort}
 	\subsection{Binary Search}
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{BinarySearchHigh.png}
+        \caption{High-Level Binary Search Flowchart}
+        \label{fig:highBinary}
+    \end{figure}
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{BinarySearchLow.png}
+        \caption{Low-Level Binary Search Flowchart}
+        \label{fig:lowBinary}
+    \end{figure}
 
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{NonPipelinedBranching.png}
+        \caption{Non-Pipelined Naive Branching}
+        \label{fig:naiveBranching}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.5\linewidth]{PipelinedBranching.png}
+        \caption{Pipelined Best Branching}
+        \label{fig:bestBranching}
+    \end{figure}
+    
 \section{Pipelining and Hazards}
 \indent 
 	\subsection{Insertion Sort}
@@ -79,5 +108,3 @@
 \vfill
 
 \end{document}
-
-
