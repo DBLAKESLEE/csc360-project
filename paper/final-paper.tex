@@ -10,6 +10,7 @@
 \usepackage{verbatim}
 \usepackage{graphicx}
 \usepackage{cite}
+\usepackage{float}
 \hyphenation{op-tical net-works semi-conduc-tor IEEE-Xplore}
 
 \begin{document}
@@ -49,6 +50,7 @@
 \section{Design Approach}
 \indent
 	\subsection{Insertion Sort}
+\indent The design process for the insertion sort algorithm began with research into how the algorithm functioned, as to best understand the problem, solution, and implementation. Next, a high-level flowchart was developed from the methods found during the research stage, and can be found in Figure \ref{insertion-high-flow}. From there, C code was made to accomplish the insertion sort task, which could then be more easily translated to RISC-V assembly. After the C implementation, a low-level flowchart (Figure \ref{insertion-low-flow}) was created, which proved very useful in the proceeding step-by-step translation into assembly. After the translation to assembly, the program was tested in Ripes to verify completeness and to observe certain metrics provided by Ripes. The C program was then translated once again into assembly, but this time using an optimized 'gcc' style compiler. Finally, the optimized compiler program was compared to the hand-generated program in Ripes to document improvements in CPI, clock cycles, instruction count, and execution time. 
 	\subsection{Binary Search}
     For simple algorithms like binary search, the first step was drawing a high-level flowchart (see figure \ref{fig:highBinary}). Then, it was converted into C code and tested for bugs. This was converted into a low-level flowchart (figure \ref{fig:lowBinary}) and then, given the simplicity of the algorithm, converted into assembly by hand to produce the naive implementation. An optimized compiler-generated algorithm, referred to as just the compiler algorithm, followed, and both were tested in Ripes. Finally, after studying the hazards, they were modified into one final algorithm, called the modified algorithm.
 
@@ -58,33 +60,46 @@
 \section{Flowcharts and Design Progression}
 \indent 
 	\subsection{Insertion Sort}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/high-level.png}
+				\caption{High-Level Insertion Sort Flowchart}
+				\label{insertion-high-flow}
+		\end{figure}
+		\begin{figure}[H]
+			\centering
+			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/low-level.png}
+				\caption{Low-Level Insertion Sort Flowchart}
+				\label{insertion-low-flow}
+		\end{figure}
+
 	\subsection{Binary Search}
     The binary search is simple, and is explained best visually (see fig \ref{fig:highBinary}). Essentially, you start with a sorted structure to be searched, usually an array or a tree, and set Left and Right pointers at the start and end respectively. Then, calculate the midpoint between them and check the midpoint value against the search value. If the search value is in the upper half of the array, the left pointer moves to the middle and the process repeats; if the search value is in the lower half of the array, the right pointer moves to the middle and the process repeats. Eventually, either the value is found or the left and right pointers hit each other and the value is not present.
     
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{BinarySearchHigh.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchHigh.png}
         \caption{High-Level Binary Search Flowchart}
         \label{fig:highBinary}
     \end{figure}
     
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{BinarySearchLow.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchLow.png}
         \caption{Low-Level Binary Search Flowchart}
         \label{fig:lowBinary}
     \end{figure}
 
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{NonPipelinedBranching.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/NonPipelinedBranching.png}
         \caption{Non-Pipelined Naive Branching}
         \label{fig:naiveBranching}
     \end{figure}
 
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{PipelinedBranching.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/PipelinedBranching.png}
         \caption{Pipelined Modified Branching}
         \label{fig:modifiedBranching}
     \end{figure}
@@ -104,16 +119,16 @@
 	\subsection{Binary Search}
     There were three different assembly implementations: the naive, the compiler, and the modified. The naive and modified are entirely the same except for the order of branching (see section V for details). The compiler version has the same branch ordering trick as the modified, but included two few extra instructions on top. First, it set the return register to -1 by default, saving a cycle later if the item was not found but wasting a cycle if it was. Second, it immediately checked if the array length was greater than zero, saving time for an invalid array parameter but wasting time on valid ones.
 
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{ClockCyclesByAlgorithm.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/ClockCyclesByAlgorithm.png}
         \caption{Performance by Algorithm and Processor}
         \label{fig:clockCycles}
     \end{figure}
 
-    \begin{figure}
+    \begin{figure}[H]
         \centering
-        \includegraphics[width=0.5\linewidth]{executionTimeByAlgorithm.png}
+        \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/executionTimeByAlgorithm.png}
         \caption{Execution Time by Algorithm and Processor}
         \label{fig:executionTime}
     \end{figure}
