@@ -32,9 +32,19 @@
 
 \section{Introduction}
 \IEEEPARstart{H}{ere} is an example of how to cite\cite{ref1}.
+    Searching and sorting data structures is fundamental to all data science, so fast algorithms are critical.
+    
+    The insertion sort...(finish the sentence here)
+    
+    The binary search is the standard method, usually used for arrays, trees, and array-like structures, that performs searches in O(log n) time. It is so widely used that even small optimizations are well worth while. As such, refining the assembly code is a highly useful exercise. In this project, three designs will be examined: a naive implementation, a compiler-optimized version, and a modified version that shares aspects from each.
+    
 
 \section{Background and Scope of Problem}
-\indent 
+\indent
+    All the algorithms and testing in this paper will be designed for a RISC-V 32-bit environment, comparing the single-stage and five-stage pipelining process on speed.
+ 
+    The binary search implemented here will be fairly straightforward, but will be tailored to utilize a five-stage pipeline.
+    
 
 \section{Design Approach}
 \indent
@@ -49,6 +59,7 @@
 \indent 
 	\subsection{Insertion Sort}
 	\subsection{Binary Search}
+    The binary search is simple, and is explained best visually (see fig \ref{fig:highBinary}). Essentially, you start with a sorted structure to be searched, usually an array or a tree, and set Left and Right pointers at the start and end respectively. Then, calculate the midpoint between them and check the midpoint value against the search value. If the search value is in the upper half of the array, the left pointer moves to the middle and the process repeats; if the search value is in the lower half of the array, the right pointer moves to the middle and the process repeats. Eventually, either the value is found or the left and right pointers hit each other and the value is not present.
     
     \begin{figure}
         \centering
@@ -84,7 +95,7 @@
 	\subsection{Binary Search}
     Looking at the different algorithm diagrams, there are two hazards. First is a load-use hazard "lw x31, 0, x31" followed by a branch statement using x31. This is common to all three since the code could not be rearranged to place this earlier.
 
-    The second hazard is a branch hazard rooted in the arrangement of branch statements in the assembly code. In the naive algorithm (Fig. \ref{fig:naiveBranching}), one branch statement jumped to the next upon success in a daisy chain pattern. This caused the two pipelined instructions after to be flushed upon failure. Since there were three cases, the chance of any branch failing was higher than those of it succeeding. There was an opportunity for three branch hazards per loop. Both the modified and compiler algorithms prevented this by placing all branch statements adjecent to each other in the code (see Fig. \ref{fig:modifiedBranching}). As such, a failure would fall through to evaluating the next branch, causing at most one branch hazard per loop.
+    The second hazard is a branch hazard rooted in the arrangement of branch statements in the assembly code. In the naive algorithm (Fig. \ref{fig:naiveBranching}), one branch statement jumped to the next upon success in a daisy chain pattern. This caused the two pipelined instructions after to be flushed upon failure. Since there were three cases, the chance of any branch failing was higher than those of it succeeding. There was an opportunity for three branch hazards per loop. Both the modified and compiler algorithms prevented this by placing all branch statements adjacent to each other in the code (see Fig. \ref{fig:modifiedBranching}). As such, a failure would fall through to evaluating the next branch, causing at most one branch hazard per loop.
     
 
 \section{Assembly Implementation}
@@ -115,17 +126,29 @@
 	\subsection{Binary Search}
     The fastest algorithm, for both processors, was the modified algorithm. It tied with the naive in single-stage, given that there is no branch penalty, and beat the compiler by approximately two cycles. In the five-stage, the branch arrangement for modified and compiler easily beat out naive. Still, the compiler's extra introductory steps served to slow it down by 2 cycles.
 
-    It should be noted that single stage took half the cycles of five-stage, because the latter must flush and stall frequently. However, the advantage is that the five-stage runs five cycles in the time the single-stage runs one. In practice, due to added hardware complexity for pipelining, the clock period is only around three times as fast. A standard clock period for RISC-V hardware was found online: 30 and 115 MHz for single and five-stage respectively. The estimated execution times, seen in figure \ref{fig:executionTime}, demonstrate the same pattern identified above: modified is fastest. 
+    It should be noted that single stage took half the cycles of five-stage, because the latter must flush and stall frequently. However, the advantage is that the five-stage runs five cycles in the time the single-stage runs one. In practice, due to added hardware complexity for pipelining, the clock period is only around three times as fast. A standard clock period for RISC-V hardware was found online: 30 and 115 MHz for single and five-stage respectively. The estimated execution times, seen in figure \ref{fig:executionTime}, demonstrate the same pattern identified above: modified is fastest.
+
+
+\section{Further Research}
+\indent
+    \subsection{Insertion Sort}
+	\subsection{Binary Search}
+    Branch hazards are the primary slowdown of the binary search algorithm, and although a branchless binary search is possible with clever loop unrolling \cite{ref1}\cite{ref2}, this is beyond the scope of this project.
+
 
 \section{Conclusion}
-\indent 
+\indent
+    The insertion sort...
+    The fastest binary search algorithm was the modified version for two reasons. First, it cut out early-return checks, betting that the majority of data structures to be searched would be valid. More significantly, it reordered the branches to take full advantage of pipelining, minimizing branch delays.
+
 
 \begin{thebibliography}{1}
 \bibliographystyle{IEEEtran}
 
 \bibitem{ref1}
-
+Muscar, A. (2023, February 18). Beautiful Binary Search in D. Alex’s website. https://muscar.eu/shar-binary-search-meta.html
 \bibitem{ref2}
+Skarupke, M. (2023, April 28). Beautiful branchless binary search. Probably Dance. https://probablydance.com/2023/04/27/beautiful-branchless-binary-search/
 
 \end{thebibliography}
 
