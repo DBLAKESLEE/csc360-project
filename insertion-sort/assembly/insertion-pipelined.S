@@ -3,7 +3,7 @@
 # t1: array[i]
 # t2: current value
 # t3: j
-# t4: array[j]
+# t4: read array[j]
 # t5: value at array[j]
 
 .data
@@ -14,15 +14,14 @@
 
 	lw a1, n 									# a1 = array size
 	la a0, array 							# a0 = array address
-	li t0, 1 # i = 1
+	li t0, 1 									# i = 1
 
 for_loop:
 	bge t0, a1, end
 	slli t1, t0, 2 						# compute address array[i]
-	add t1, a0, t1 						# adding offset to base address of array
 	addi t3, t0, -1 					# moved to avoid dependency
+	add t1, a0, t1 						# adding offset to base address of array
 	lw t2, 0(t1)
-	#addi t3, t0, -1 					# j = i - 1
 
 while_loop:
 	blt t3, x0, insert
@@ -40,7 +39,6 @@ insert:
 	addi t0, t0, 1 						# moved to avoid dependency
 	add t4, a0, t4 						# adding offset to base address of array
 	sw t2, 4(t4) 							# storing array[j + offset] into current value
-	#addi t0, t0, 1 					# i = i + 1
 	beq x0, x0, for_loop
 
 end:

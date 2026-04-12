@@ -1,9 +1,7 @@
 \documentclass[lettersize,journal]{IEEEtran}
 \usepackage{amsmath,amsfonts}
 \usepackage{algorithmic}
-\usepackage{algorithm}
-\usepackage{array}
-\usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\usepackage{algorithm} \usepackage{array} \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
 \usepackage{textcomp}
 \usepackage{stfloats}
 \usepackage{url}
@@ -58,13 +56,13 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 
 	\subsection{Insertion Sort}
 		The high-level flowchart shown in Figure \ref{insertion-high-flow} basically walks through the C implementation of the insertion sort, and the flowchart in Figure \ref{insertion-low-flow} goes through the assembly implementation. First, an array and the array size are taken as inputs, then an index is implemented	that steps through the array until it reaches the array size. A different variable that represents the current value is then set to the current array value, and another index is created for the value left of the current value. The left index is decremented until it reaches zero or if an array element is found to be smaller than the current value. Elements larger than the current value are then stored in the correct location, and the process is repeated.
-		\begin{figure}[h!]
+		\begin{figure}[!ht]
 			\centering
 			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/high-level.png}
 				\caption{High-Level Insertion Sort Flowchart}
 				\label{insertion-high-flow}
 		\end{figure}
-		\begin{figure}[h!]
+		\begin{figure}[!ht]
 			\centering
 			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/low-level.png}
 				\caption{Low-Level Insertion Sort Flowchart}
@@ -74,28 +72,28 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 	\subsection{Binary Search}
     The binary search is simple, and is explained best visually (see fig \ref{fig:highBinary}). Essentially, you start with a sorted structure to be searched, usually an array or a tree, and set Left and Right pointers at the start and end respectively. Then, calculate the midpoint between them and check the midpoint value against the search value. If the search value is in the upper half of the array, the left pointer moves to the middle and the process repeats; if the search value is in the lower half of the array, the right pointer moves to the middle and the process repeats. Eventually, either the value is found or the left and right pointers hit each other and the value is not present.
     
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchHigh.png}
         \caption{High-Level Binary Search Flowchart}
         \label{fig:highBinary}
     \end{figure}
     
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchLow.png}
         \caption{Low-Level Binary Search Flowchart}
         \label{fig:lowBinary}
     \end{figure}
 
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/NonPipelinedBranching.png}
         \caption{Non-Pipelined Naive Branching}
         \label{fig:naiveBranching}
     \end{figure}
 
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/PipelinedBranching.png}
         \caption{Pipelined Modified Branching}
@@ -103,6 +101,7 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
     \end{figure}
     
 \section{Pipelining and Hazards}
+\label{section:pipe-hazards}
 	\subsection{Insertion Sort}
 		There are many hazards in the insertion sort implementation and they exist in three different categories: load-use hazards, data hazards, and control/branch hazards. 
 		The load-use hazard occurs in the \textit{while} loop, when the array value of the left index is being loaded in one instruction, and then used to branch in the next instruction. This fails without pipelining due to the load instruction writing in the MEM/WB stage, while the branch instruction needs the value in the EX stage. The data hazards occur in each loop due to dependencies from \textit{slli} and \textit{add} instructions, which are most easily resolved by placing unrelated instructions between them. Finally, there are many branch hazards due to uncertainty of the variables in the \textit{for} loop and \textit{while} loop.
@@ -114,17 +113,20 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 \section{Assembly Implementation}
 \indent 
 	\subsection{Insertion Sort}
+		The first assembly version was generated directly from the low-level flowchart shown in Figure \ref{insertion-low-flow}. It was hand-generated line by line, without much consideration of a pipelined structure, or hazards. \\
+\indent After identifying the hazards discussed in section \ref{section:pipe-hazards}, a pipeline-aware assembly implementation was created that addressed as many of these hazards as possible. In each loop with data hazards, unrelated \textit{addi} instructions were placed in between the \textit{slli} and \textit{add} instructions so as to give the processor time to return the correct dependent values. There was not much to be done concerning the branch/control hazards, though, and the load-use hazard was also unavoidable in this iteration. \\
+\indent The final implementation was generated by a \textit{gcc}-based compiler. The compiler produced a further optimized assembly file, that used a pointer-based loop style instead of index-based in the first two versions. The compiler also utilized more registers, thus reducing the data and load-use hazards present in the first and second implementations. Finally, the compiler also more heavily reordered the instructions beyond that of the second assembly version. These changes correlated to increased efficiency discussed further in section \ref{section:results}.
 	\subsection{Binary Search}
-    There were three different assembly implementations: the naive, the compiler, and the modified. The naive and modified are entirely the same except for the order of branching (see section V for details). The compiler version has the same branch ordering trick as the modified, but included two few extra instructions on top. First, it set the return register to -1 by default, saving a cycle later if the item was not found but wasting a cycle if it was. Second, it immediately checked if the array length was greater than zero, saving time for an invalid array parameter but wasting time on valid ones.
+    There were three different assembly implementations: the naive, the compiler, and the modified. The naive and modified are entirely the same except for the order of branching (see section \ref{section:pipe-hazards} for details). The compiler version has the same branch ordering trick as the modified, but included two few extra instructions on top. First, it set the return register to -1 by default, saving a cycle later if the item was not found but wasting a cycle if it was. Second, it immediately checked if the array length was greater than zero, saving time for an invalid array parameter but wasting time on valid ones.
 
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/ClockCyclesByAlgorithm.png}
         \caption{Performance by Algorithm and Processor}
         \label{fig:clockCycles}
     \end{figure}
 
-    \begin{figure}[h!]
+    \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/executionTimeByAlgorithm.png}
         \caption{Execution Time by Algorithm and Processor}
@@ -134,8 +136,31 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
     
 
 \section{Results}
+\label{section:results}
 \indent 
 	\subsection{Insertion Sort}
+		The insertion sort algorithm was evaluated using a 6 value array to be sorted. Each iteration of the algorithm was run through Ripes simulation software using both a single and five-stage processor. Data such as clock cycles, CPI, instruction count, and clock rate were taken from Ripes to be evaluated. The latter three data points can be used to find execution time via the formula in equation \ref{equation:ex-time}. \\
+	\begin{equation}
+	\label{equation:ex-time}
+		\text{CPU Execution Time} = \frac{\text{Instr. Count} \cdot \text{CPI}}{\text{Clock Rate}}
+	\end{equation}
+\\
+\indent The clock cycles observed from Ripes simulation software for each program are shown in Figure \ref{insertion-cc}. The clock cycle data indicates no difference between the non-pipelined and pipelined versions of the assembly, and show that the compiler-generated code takes less clock cycles. However, the execution time data is even more interesting, and is presented in Figure \ref{insertion-et}. While the compiler code outperformed in clock cycles taken, it is clear that the pipelined implementation is the better performer in terms of 5-stage processor execution time, likely due to the higher clock rate achieved. 
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=0.9\linewidth]{./../insertion-sort/Figures/clock-cycles.png}
+      	\caption{Clock Cycle Comparison by Algorithm and Processor}
+        \label{insertion-cc}
+    \end{figure}
+
+    \begin{figure}[!ht]
+      \centering
+      \includegraphics[width=0.9\linewidth]{./../insertion-sort/Figures/execution-time.png}
+      	\caption{Execution Time Comparison by Algorithm and Processor}
+        \label{insertion-et}
+    \end{figure}
+
 	\subsection{Binary Search}
     The fastest algorithm, for both processors, was the modified algorithm. It tied with the naive in single-stage, given that there is no branch penalty, and beat the compiler by approximately two cycles. In the five-stage, the branch arrangement for modified and compiler easily beat out naive. Still, the compiler's extra introductory steps served to slow it down by 2 cycles.
 
