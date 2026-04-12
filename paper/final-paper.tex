@@ -26,26 +26,23 @@
 \maketitle
 
 \begin{abstract}
+This paper explores two fundamental algorithms--insertion sort and binary search--and their implementation in RISC-V 32-bit assembly. The algorithms will be examined in the C programming language, then translated to assembly. They will be analyzed by means of clock cycles, CPI, instruction count, execution time, and forwarding behavior to determine the effectiveness of the hand-generated assembly implementations compared to the compiler-generated versions. The paper will walk through how Ripes was used to evaluate each design, and hazards and forwarding related to each algorithm will also be discussed.
 \end{abstract}
 
 \begin{IEEEkeywords}
+Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 \end{IEEEkeywords}
 
 \section{Introduction}
-\IEEEPARstart{H}{ere} is an example of how to cite\cite{ref1}.
-    Searching and sorting data structures is fundamental to all data science, so fast algorithms are critical.
+\IEEEPARstart{S}{earching} and sorting data structures is fundamental to all data science, so fast algorithms are critical. Sorting places data in an order that is predictable, which correlates to improved performance of searching algorithms and other data analysis. Together, these algorithms are capable of many useful computing tasks that make up modern operating systems, search engines, and databases.
     
-    The insertion sort...(finish the sentence here)
-    
-    The binary search is the standard method, usually used for arrays, trees, and array-like structures, that performs searches in O(log n) time. It is so widely used that even small optimizations are well worth while. As such, refining the assembly code is a highly useful exercise. In this project, three designs will be examined: a naive implementation, a compiler-optimized version, and a modified version that shares aspects from each.
-    
-
 \section{Background and Scope of Problem}
 \indent
     All the algorithms and testing in this paper will be designed for a RISC-V 32-bit environment, comparing the single-stage and five-stage pipelining process on speed.
  
-    The binary search implemented here will be fairly straightforward, but will be tailored to utilize a five-stage pipeline.
-    
+    The insertion sort solves the problem of being able to sort an unsorted array in the simplest way possible. Sorting an array makes it easier to process, search, and analyze data, as many operations work more efficiently with sorted arrays. Insertion sort works by building the sorted array one element at a time, inserting an indexed value and comparing, and sorting into the correct position relative to previously sorted elements. It works best for small datasets, as stepping through each array element can be comprehensive and time consuming for large arrays. 
+
+    The binary search implemented here will be fairly straightforward, but will be tailored to utilize a five-stage pipeline. It is the standard method, usually used for arrays, trees, and array-like structures, that performs searches in O(log n) time. It is so widely used that even small optimizations are well worth while. As such, refining the assembly code is a highly useful exercise. In this project, three designs will be examined: a naive implementation, a compiler-optimized version, and a modified version that shares aspects from each.
 
 \section{Design Approach}
 \indent
@@ -58,15 +55,16 @@
 
 
 \section{Flowcharts and Design Progression}
-\indent 
+
 	\subsection{Insertion Sort}
-		\begin{figure}[H]
+		The high-level flowchart shown in Figure \ref{insertion-high-flow} basically walks through the C implementation of the insertion sort, and the flowchart in Figure \ref{insertion-low-flow} goes through the assembly implementation. First, an array and the array size are taken as inputs, then an index is implemented	that steps through the array until it reaches the array size. A different variable that represents the current value is then set to the current array value, and another index is created for the value left of the current value. The left index is decremented until it reaches zero or if an array element is found to be smaller than the current value. Elements larger than the current value are then stored in the correct location, and the process is repeated.
+		\begin{figure}[h!]
 			\centering
 			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/high-level.png}
 				\caption{High-Level Insertion Sort Flowchart}
 				\label{insertion-high-flow}
 		\end{figure}
-		\begin{figure}[H]
+		\begin{figure}[h!]
 			\centering
 			\includegraphics[width=0.75\linewidth]{./../insertion-sort/Figures/low-level.png}
 				\caption{Low-Level Insertion Sort Flowchart}
@@ -76,28 +74,28 @@
 	\subsection{Binary Search}
     The binary search is simple, and is explained best visually (see fig \ref{fig:highBinary}). Essentially, you start with a sorted structure to be searched, usually an array or a tree, and set Left and Right pointers at the start and end respectively. Then, calculate the midpoint between them and check the midpoint value against the search value. If the search value is in the upper half of the array, the left pointer moves to the middle and the process repeats; if the search value is in the lower half of the array, the right pointer moves to the middle and the process repeats. Eventually, either the value is found or the left and right pointers hit each other and the value is not present.
     
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchHigh.png}
         \caption{High-Level Binary Search Flowchart}
         \label{fig:highBinary}
     \end{figure}
     
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/BinarySearchLow.png}
         \caption{Low-Level Binary Search Flowchart}
         \label{fig:lowBinary}
     \end{figure}
 
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/NonPipelinedBranching.png}
         \caption{Non-Pipelined Naive Branching}
         \label{fig:naiveBranching}
     \end{figure}
 
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/PipelinedBranching.png}
         \caption{Pipelined Modified Branching}
@@ -105,28 +103,28 @@
     \end{figure}
     
 \section{Pipelining and Hazards}
-\indent 
 	\subsection{Insertion Sort}
+		There are many hazards in the insertion sort implementation and they exist in three different categories: load-use hazards, data hazards, and control/branch hazards. 
+		The load-use hazard occurs in the \textit{while} loop, when the array value of the left index is being loaded in one instruction, and then used to branch in the next instruction. This fails without pipelining due to the load instruction writing in the MEM/WB stage, while the branch instruction needs the value in the EX stage. The data hazards occur in each loop due to dependencies from \textit{slli} and \textit{add} instructions, which are most easily resolved by placing unrelated instructions between them. Finally, there are many branch hazards due to uncertainty of the variables in the \textit{for} loop and \textit{while} loop.
 	\subsection{Binary Search}
     Looking at the different algorithm diagrams, there are two hazards. First is a load-use hazard "lw x31, 0, x31" followed by a branch statement using x31. This is common to all three since the code could not be rearranged to place this earlier.
 
     The second hazard is a branch hazard rooted in the arrangement of branch statements in the assembly code. In the naive algorithm (Fig. \ref{fig:naiveBranching}), one branch statement jumped to the next upon success in a daisy chain pattern. This caused the two pipelined instructions after to be flushed upon failure. Since there were three cases, the chance of any branch failing was higher than those of it succeeding. There was an opportunity for three branch hazards per loop. Both the modified and compiler algorithms prevented this by placing all branch statements adjacent to each other in the code (see Fig. \ref{fig:modifiedBranching}). As such, a failure would fall through to evaluating the next branch, causing at most one branch hazard per loop.
     
-
 \section{Assembly Implementation}
 \indent 
 	\subsection{Insertion Sort}
 	\subsection{Binary Search}
     There were three different assembly implementations: the naive, the compiler, and the modified. The naive and modified are entirely the same except for the order of branching (see section V for details). The compiler version has the same branch ordering trick as the modified, but included two few extra instructions on top. First, it set the return register to -1 by default, saving a cycle later if the item was not found but wasting a cycle if it was. Second, it immediately checked if the array length was greater than zero, saving time for an invalid array parameter but wasting time on valid ones.
 
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/ClockCyclesByAlgorithm.png}
         \caption{Performance by Algorithm and Processor}
         \label{fig:clockCycles}
     \end{figure}
 
-    \begin{figure}[H]
+    \begin{figure}[h!]
         \centering
         \includegraphics[width=0.75\linewidth]{./../binary-search/Figures/executionTimeByAlgorithm.png}
         \caption{Execution Time by Algorithm and Processor}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.24)  6 APR 2026 11:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2025.10.24)  11 APR 2026 20:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -373,95 +373,113 @@ e
 File: ./../insertion-sort/Figures/high-level.png Graphic file (type png)
 <use ./../insertion-sort/Figures/high-level.png>
 Package pdftex.def Info: ./../insertion-sort/Figures/high-level.png  used on in
-put line 55.
+put line 63.
 (pdftex.def)             Requested size: 189.0pt x 305.22519pt.
 <./../insertion-sort/Figures/low-level.png, id=2, 479.1501pt x 804.1242pt>
 File: ./../insertion-sort/Figures/low-level.png Graphic file (type png)
 <use ./../insertion-sort/Figures/low-level.png>
 Package pdftex.def Info: ./../insertion-sort/Figures/low-level.png  used on inp
-ut line 61.
+ut line 69.
 (pdftex.def)             Requested size: 189.0pt x 317.18999pt.
 
 [1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texlive/texmf-
 dist/fonts/enc/dvips/base/8r.enc}
 
 
- <./../insertion-sort/Figures/high-level.png>]
-<./../binary-search/Figures/BinarySearchHigh.png, id=13, 1304.875pt x 782.925pt
+]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./../binary-search/Figures/BinarySearchHigh.png, id=12, 1304.875pt x 782.925pt
 >
 File: ./../binary-search/Figures/BinarySearchHigh.png Graphic file (type png)
 <use ./../binary-search/Figures/BinarySearchHigh.png>
 Package pdftex.def Info: ./../binary-search/Figures/BinarySearchHigh.png  used 
-on input line 70.
+on input line 79.
 (pdftex.def)             Requested size: 189.0pt x 113.39578pt.
-<./../binary-search/Figures/BinarySearchLow.png, id=15, 1509.64pt x 863.225pt>
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./../binary-search/Figures/BinarySearchLow.png, id=14, 1509.64pt x 863.225pt>
 File: ./../binary-search/Figures/BinarySearchLow.png Graphic file (type png)
 <use ./../binary-search/Figures/BinarySearchLow.png>
 Package pdftex.def Info: ./../binary-search/Figures/BinarySearchLow.png  used o
-n input line 77.
+n input line 86.
 (pdftex.def)             Requested size: 189.0pt x 108.06091pt.
-<./../binary-search/Figures/NonPipelinedBranching.png, id=16, 1068.99374pt x 48
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<./../binary-search/Figures/NonPipelinedBranching.png, id=15, 1068.99374pt x 48
 1.8pt>
 File: ./../binary-search/Figures/NonPipelinedBranching.png Graphic file (type p
 ng)
 <use ./../binary-search/Figures/NonPipelinedBranching.png>
 Package pdftex.def Info: ./../binary-search/Figures/NonPipelinedBranching.png  
-used on input line 84.
+used on input line 93.
 (pdftex.def)             Requested size: 189.0pt x 85.1764pt.
 
-Underfull \vbox (badness 1215) has occurred while \output is active []
+LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./../binary-search/Figures/PipelinedBranching.png, id=17, 817.0525pt x 624.332
+<./../binary-search/Figures/PipelinedBranching.png, id=16, 817.0525pt x 624.332
 5pt>
 File: ./../binary-search/Figures/PipelinedBranching.png Graphic file (type png)
 
 <use ./../binary-search/Figures/PipelinedBranching.png>
 Package pdftex.def Info: ./../binary-search/Figures/PipelinedBranching.png  use
-d on input line 91.
+d on input line 100.
 (pdftex.def)             Requested size: 189.0pt x 144.41273pt.
- [2 <./../insertion-sort/Figures/low-level.png> <./../binary-search/Figures/Bin
-arySearchHigh.png> <./../binary-search/Figures/BinarySearchLow.png> <./../binar
-y-search/Figures/NonPipelinedBranching.png> <./../binary-search/Figures/Pipelin
-edBranching.png>]
-<./../binary-search/Figures/ClockCyclesByAlgorithm.png, id=26, 396.39pt x 218.1
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[2 <./../insertion-sort/Figures/high-level.png> <./../insertion-sort/Figures/lo
+w-level.png> <./../binary-search/Figures/BinarySearchHigh.png> <./../binary-sea
+rch/Figures/BinarySearchLow.png>]
+<./../binary-search/Figures/ClockCyclesByAlgorithm.png, id=24, 396.39pt x 218.1
 24pt>
 File: ./../binary-search/Figures/ClockCyclesByAlgorithm.png Graphic file (type 
 png)
 <use ./../binary-search/Figures/ClockCyclesByAlgorithm.png>
 Package pdftex.def Info: ./../binary-search/Figures/ClockCyclesByAlgorithm.png 
- used on input line 113.
+ used on input line 122.
 (pdftex.def)             Requested size: 189.0pt x 104.0027pt.
-<./../binary-search/Figures/executionTimeByAlgorithm.png, id=27, 362.007pt x 21
+<./../binary-search/Figures/executionTimeByAlgorithm.png, id=25, 362.007pt x 21
 7.467pt>
 File: ./../binary-search/Figures/executionTimeByAlgorithm.png Graphic file (typ
 e png)
 <use ./../binary-search/Figures/executionTimeByAlgorithm.png>
 Package pdftex.def Info: ./../binary-search/Figures/executionTimeByAlgorithm.pn
-g  used on input line 120.
+g  used on input line 129.
 (pdftex.def)             Requested size: 189.0pt x 113.53807pt.
- [3 <./../binary-search/Figures/ClockCyclesByAlgorithm.png> <./../binary-search
-/Figures/executionTimeByAlgorithm.png>] (./final-paper.aux)
+ [3 <./../binary-search/Figures/NonPipelinedBranching.png> <./../binary-search/
+Figures/PipelinedBranching.png> <./../binary-search/Figures/ClockCyclesByAlgori
+thm.png> <./../binary-search/Figures/executionTimeByAlgorithm.png>] [4
+
+] (./final-paper.aux)
  ***********
 LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-22>
  ***********
+
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
  ) 
 Here is how much of TeX's memory you used:
- 4607 strings out of 476106
- 81445 string characters out of 5793932
- 1932975 words of memory out of 5000000
- 26583 multiletter control sequences out of 15000+600000
+ 4606 strings out of 476106
+ 81435 string characters out of 5793932
+ 1938975 words of memory out of 5000000
+ 26582 multiletter control sequences out of 15000+600000
  591795 words of font info for 89 fonts, out of 8000000 for 9000
  63 hyphenation exceptions out of 8191
- 57i,6n,65p,1109b,227s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 57i,7n,65p,1109b,235s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/t
 exlive/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on final-paper.pdf (3 pages, 375024 bytes).
+Output written on final-paper.pdf (4 pages, 390747 bytes).
 PDF statistics:
- 52 PDF objects out of 1000 (max. 8388607)
- 22 compressed objects within 1 object stream
+ 55 PDF objects out of 1000 (max. 8388607)
+ 24 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

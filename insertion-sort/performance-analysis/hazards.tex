@@ -77,7 +77,7 @@ while_loop:
 		@C@blt@ @D@t3@, @C@x0, insert@			@C@# branch hazard and dependency from line 32@
 		slli @D@t4@, t3, 2
 		add @D@t4@, a0, @D@t4@							@D@# add rs2 depends on rd of slli@
-		lw @L@t5@, 0(@D@t4@)									@L@# here there is a load use hazard where lw writes t5,@
+		lw @L@t5@, 0(@D@t4@)									@L@# here there is a load use hazard where lw writes t5@
 		@C@ble@ @L@t5@, @C@t2, insert@			@L@# in MEM/WB, but ble needs t5 in EX@
 		sw @L@t5@, 4(t4)									@L@# similarly, t5 written in MEM/WB but need as input for sw@
 		addi @C@t3@, @D@t3@, -1								
@@ -88,7 +88,7 @@ insert:
 		add @D@t4@, a0, @D@t4@							@D@# add rs2 depends on rd of slli@
 		sw t2, 4(t4)
 		addi @C@t0@, @D@t0@, 1
-		@C@beq x0, x0, for_loop@	@C@# branch hazard
+		@C@beq x0, x0, for_loop@	@C@# branch hazard@
 	
 end:
 		li a7, 10
