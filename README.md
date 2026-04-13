@@ -3,6 +3,8 @@
 # Division of Labor
 We decided to each handle one of the two algoritms. Dawson worked on the insertion sort algorithm, while Mark worked on the binary search algorithm. This proved to work well, as each team member's work was distributed across the various deliverables for each algorithm. As challenges arose, the team members would discuss and help each other where it was needed. 
 
+Similarly with the paper and presentation, Dawson and Mark each produced work related to their researched algorithm. 
+
 # General Challenges
 The project floundered for a little while due to disorganization, but this was solved by conferencing with each other, asking the professor questions, and good planning.
 
