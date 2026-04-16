@@ -47,7 +47,7 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 	\subsection{Binary Search}
     For simple algorithms like binary search, the first step was drawing a high-level flowchart (see figure \ref{fig:highBinary}). Then, it was converted into C code and tested for bugs. This was converted into a low-level flowchart (figure \ref{fig:lowBinary}) and then, given the simplicity of the algorithm, converted into assembly by hand to produce the naive implementation. An optimized compiler-generated algorithm, referred to as just the compiler algorithm, followed, and both were tested in Ripes. Finally, after studying the hazards, they were modified into one final algorithm, called the modified algorithm.
 
-    The algorithms were tested by averaging the cycles it took to find an element in the deepest level of the tree and two deepest level searches for items not in the tree (too low and too high, respectively). This produced the results seen in figure \ref{fig:clockCycles}.
+    The algorithms were tested by averaging the cycles it took to find an element in the deepest level of the tree and two deepest level searches for items not in the tree (too low and too high, respectively). This produced the results seen in figure \ref{fig:binary-cc}.
 
 \section{Flowcharts and Design Progression}
 	\subsection{Insertion Sort}
@@ -118,14 +118,14 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
         \centering
         \includegraphics[width=0.9\linewidth]{./../binary-search/Figures/ClockCyclesByAlgorithm.png}
         \caption{Performance by Algorithm and Processor}
-        \label{fig:clockCycles}
+        \label{fig:binary-cc}
     \end{figure}
 
     \begin{figure}[!ht]
         \centering
         \includegraphics[width=0.9\linewidth]{./../binary-search/Figures/executionTimeByAlgorithm.png}
         \caption{Execution Time by Algorithm and Processor}
-        \label{fig:executionTime}
+        \label{fig:binary-et}
     \end{figure}
     
 \section{Results}
@@ -156,7 +156,7 @@ Cycles per instruction (CPI), execution time, pipelining, pointer, index, hazard
 	\subsection{Binary Search}
     The fastest algorithm, for both processors, was the modified algorithm. It tied with the naive in single-stage, given that there is no branch penalty, and beat the compiler by approximately two cycles. In the five-stage, the branch arrangement for modified and compiler easily beat out naive. Still, the compiler's extra introductory steps served to slow it down by 2 cycles.
 
-    It should be noted that single stage took half the cycles of five-stage, because the latter must flush and stall frequently. However, the advantage is that the five-stage runs five cycles in the time the single-stage runs one. In practice, due to added hardware complexity for pipelining, the clock period is only around three times as fast. A standard clock period for RISC-V hardware was found online: 30 and 115 MHz for single and five-stage respectively. The estimated execution times, seen in figure \ref{fig:executionTime}, demonstrate the same pattern identified above: modified is fastest.
+    It should be noted that single stage took half the cycles of five-stage, because the latter must flush and stall frequently. However, the advantage is that the five-stage runs five cycles in the time the single-stage runs one. In practice, due to added hardware complexity for pipelining, the clock period is only around three times as fast. A standard clock period for RISC-V hardware was found online: 30 and 115 MHz for single and five-stage respectively. The estimated execution times, seen in figure \ref{fig:binary-et}, demonstrate the same pattern identified above: modified is fastest.
 
 \section{Further Research}
   \subsection{Insertion Sort}
