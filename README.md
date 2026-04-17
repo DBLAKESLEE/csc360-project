@@ -1,4 +1,5 @@
 # csc360-project
+The files in this project are divided up by algorithm, and are further organized by folders naming what is contained in them. The 'Figures' folders contain the flowcharts and related screenshots and data from Ripes. The final paper with extra detail and clarity on the algoritms and related analysis can be found in the common folder 'paper'.
 
 # Division of Labor
 We decided to each handle one of the two algoritms. Dawson worked on the insertion sort algorithm, while Mark worked on the binary search algorithm. This proved to work well, as each team member's work was distributed across the various deliverables for each algorithm. As challenges arose, the team members would discuss and help each other where it was needed. 
